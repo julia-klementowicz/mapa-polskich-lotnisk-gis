@@ -184,7 +184,7 @@ export default function Map() {
                     : 'Wojskowa baza lotnicza'}
                 </p>
                 {marker.type === 'airport' && (
-                  <p>Liczba pasażerów: {marker.passengers}</p>
+                  <p>Roczna liczba pasażerów: {marker.passengers}</p>
                 )}
               </div>
             </Popup>
