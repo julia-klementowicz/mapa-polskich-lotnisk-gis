@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.leaflet-routing-container {
+    display: none;
+}
+
+nextjs-portal {
+  display: none;
+}

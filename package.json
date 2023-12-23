@@ -1,5 +1,5 @@
 {
-  "name": "gis-projekt",
+  "name": "mapa-polskich-lotnisk",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,15 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "leaflet": "^1.9.4",
+    "leaflet-routing-machine": "^3.2.12",
+    "next": "^14.0.4",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.0.0"
+    "react-leaflet": "^4.2.1"
   },
   "devDependencies": {
     "autoprefixer": "^10",
-    "postcss": "^8",
-    "tailwindcss": "^3",
     "eslint": "^8",
-    "eslint-config-next": "14.0.0"
+    "eslint-config-next": "14.0.0",
+    "postcss": "^8",
+    "tailwindcss": "^3"
   }
 }
