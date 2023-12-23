@@ -44,7 +44,7 @@ export default function Map() {
     }
   }, [isLoaded]);
 
-  if (!isLoaded) {
+  if (!isLoaded || typeof window === 'undefined') {
     return null;
   }
 
