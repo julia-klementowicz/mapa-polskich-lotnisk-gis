@@ -35,16 +35,19 @@ export default function LoginForm() {
 
   return (
     <div className='grid place-items-center h-screen'>
-      <div className='shadow-lg p-5 rounded-lg border-t-4 border-green-400'>
-        <h1 className='text-xl font-bold my-4'>Zaloguj się</h1>
-        <form onSubmit={handleSubmit} className='flex flex-col gap-3'>
+      <div className='w-full sm:max-w-[500px]'>
+        <form
+          onSubmit={handleSubmit}
+          className='flex flex-col gap-3 shadow-lg m-4 p-5 rounded-lg border-t-4 border-green-400'
+        >
+          <h1 className='text-xl font-bold my-4'>Zaloguj się</h1>
           <input
             required
             onChange={(e) => setUsername(e.target.value)}
             value={username}
             type='text'
             placeholder='Nazwa użytkownika'
-            className='w-[400px] border border-gray-200 py-2 px-3 bg-zinc-100/40 rounded-lg'
+            className='w-full border border-gray-200 py-2 px-3 bg-zinc-100/40 rounded-lg'
           />
           <input
             required
@@ -52,7 +55,7 @@ export default function LoginForm() {
             value={password}
             type='password'
             placeholder='Hasło'
-            className='w-[400px] border border-gray-200 py-2 px-3 bg-zinc-100/40 rounded-lg'
+            className='w-full border border-gray-200 py-2 px-3 bg-zinc-100/40 rounded-lg'
           />
           <button className='bg-green-600 text-white font-bold cursor-pointer px-6 py-2 rounded-md'>
             Zaloguj się
