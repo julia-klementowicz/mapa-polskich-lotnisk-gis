@@ -1,34 +1,31 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { useSession } from 'next-auth/react';
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  ZoomControl,
+} from 'react-leaflet';
 import { Icon } from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { markers } from '@/data/markers';
 import MapComponent from './MapComponent';
 import Routing from './Routing';
+import Loading from './Loading';
+import { markers as defaultMarkers } from '@/data/markers';
+import { PiNavigationArrow, PiMagnifyingGlass, PiX } from 'react-icons/pi';
+import 'leaflet/dist/leaflet.css';
+import MarkerModal from './MarkerModal';
 
-const markerIcons = {
-  airport: new Icon({
-    iconUrl: '/location-pin-red.png',
+function getIcon(color) {
+  return new Icon({
+    iconUrl: `/location-pin-${color}.png`,
     iconSize: [40, 40],
     iconAnchor: [20, 40],
     popupAnchor: [0, -40],
-  }),
-  military: new Icon({
-    iconUrl: '/location-pin-blue.png',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-    popupAnchor: [0, -40],
-  }),
-  search: new Icon({
-    iconUrl: '/location-pin-purple.png',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-    popupAnchor: [0, -40],
-  }),
-};
+  });
+}
 
 export default function Map() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -37,18 +34,40 @@ export default function Map() {
   const [searchResult, setSearchResult] = useState(null);
   const [shouldNavigate, setShouldNavigate] = useState(false);
   const [routingCoords, setRoutingCoords] = useState(null);
+  const [markersToShow, setMarkersToShow] = useState(defaultMarkers);
+  const [markerModalData, setMarkerModalData] = useState(null);
+  const { data: session } = useSession();
 
   useEffect(() => {
+    async function getMarkersToShow() {
+      const res = await fetch('api/userMarkers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: session?.user?.username }),
+      });
+
+      const { markers } = await res.json();
+      if (markers?.markers.length > 0) {
+        setMarkersToShow(markers.markers);
+      }
+    }
+
+    if (session?.user?.username) {
+      getMarkersToShow();
+    }
+
     if (!isLoaded) {
       setIsLoaded(true);
     }
-  }, [isLoaded]);
+  }, [isLoaded, session?.user?.username]);
 
   if (!isLoaded || typeof window === 'undefined') {
-    return null;
+    return <Loading />;
   }
 
-  const handleSearch = async (e) => {
+  async function handleSearch(e) {
     e.preventDefault();
     // Use geocoding API to get coordinates from search
     const response = await fetch(
@@ -66,9 +85,9 @@ export default function Map() {
     } else {
       alert('Nie znaleziono takiej lokalizacji');
     }
-  };
+  }
 
-  const handleNavigate = async (e) => {
+  async function handleNavigate(e) {
     e.preventDefault();
 
     const response1 = await fetch(
@@ -84,40 +103,68 @@ export default function Map() {
     const toCoordinates = data2?.results[0]?.geometry;
 
     if (fromCoordinates && toCoordinates) {
-      setRoutingCoords([fromCoordinates, toCoordinates]);
-      console.log('fromCoordinates', fromCoordinates);
-      console.log('toCoordinates', toCoordinates);
+      setRoutingCoords({
+        from: {
+          lat: fromCoordinates.lat,
+          lng: fromCoordinates.lng,
+        },
+        to: {
+          lat: toCoordinates.lat,
+          lng: toCoordinates.lng,
+        },
+      });
     } else {
       alert('Nie znaleziono takiej lokalizacji');
     }
-  };
+  }
+
+  async function handleDeleteMarker(markerId) {
+    const res = await fetch('api/deleteMarker', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username: session.user.username, markerId }),
+    });
+
+    const { message } = await res.json();
+    if (message === 'success') {
+      setMarkersToShow((prev) =>
+        prev.filter((marker) => marker._id !== markerId)
+      );
+    } else {
+      alert('Wystąpił błąd');
+    }
+  }
 
   return (
     <div className='h-full relative'>
       <form
-        style={{ zIndex: 1000 }}
-        className='absolute top-2 right-2 bg-white p-2 rounded-lg border border-neutral-300 flex flex-col gap-1'
+        style={{ zIndex: 500 }}
+        className='absolute top-2 left-2 bg-white p-2 rounded-lg border border-neutral-300 flex flex-col gap-1'
         onSubmit={shouldNavigate ? handleNavigate : handleSearch}
       >
         <div className='flex gap-1'>
           <input
             type='text'
             className='py-1 px-1.5 border border-neutral-300 rounded'
+            placeholder={shouldNavigate ? 'Punkt początkowy' : 'Szukaj miejsca'}
             onChange={(e) => {
               setSearchResult(null);
               setSearchPhrase(e.target.value);
             }}
             value={searchPhrase}
           />
-          {!shouldNavigate && (
+          {!shouldNavigate ? (
             <button type='submit'>
-              <Image
-                src='/search_icon.svg'
-                width={28}
-                height={28}
-                alt='Szukaj'
-              />
+              <PiMagnifyingGlass className='w-7 h-7' />
             </button>
+          ) : (
+            routingCoords && (
+              <button type='button' onClick={() => setRoutingCoords(null)}>
+                <PiX className='w-7 h-7' />
+              </button>
+            )
           )}
         </div>
         {shouldNavigate && (
@@ -125,19 +172,16 @@ export default function Map() {
             <input
               type='text'
               className='py-1 px-1.5 border border-neutral-300 rounded'
+              placeholder='Punkt docelowy'
               onChange={(e) => {
                 setSearchResult(null);
+                setRoutingCoords(null);
                 setDestinationPhrase(e.target.value);
               }}
               value={destinationPhrase}
             />
             <button type='submit'>
-              <Image
-                src='/navigation_icon.svg'
-                width={28}
-                height={28}
-                alt='Szukaj'
-              />
+              <PiNavigationArrow className='w-7 h-7' />
             </button>
           </div>
         )}
@@ -163,51 +207,86 @@ export default function Map() {
         center={[52.3, 19.123]}
         zoom={7}
         style={{ height: '100%', width: '100%' }}
+        zoomControl={false}
       >
+        <ZoomControl position='bottomright' />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         />
-        {markers.map((marker, i) => (
+        {markersToShow.map((marker, i) => (
           <Marker
             key={i}
             position={marker.position}
-            icon={markerIcons[marker.type]}
+            icon={getIcon(marker.color)}
           >
             <Popup>
               <div className='text-center'>
                 <h2 className='font-bold'>{marker.name}</h2>
-                <p>Kod ICAO: {marker.ICAO}</p>
-                <p>
-                  {marker.type === 'airport'
-                    ? 'Lotnisko pasażerskie'
-                    : 'Wojskowa baza lotnicza'}
-                </p>
-                {marker.type === 'airport' && (
+                {marker.ICAO && <p>Kod ICAO: {marker.ICAO}</p>}
+                {marker.description && <p>{marker.description}</p>}
+                {marker.passengers && (
                   <p>Roczna liczba pasażerów: {marker.passengers}</p>
+                )}
+                {session?.user?.username && (
+                  <div className='flex justify-around'>
+                    <button
+                      onClick={() => {
+                        setMarkerModalData(marker);
+                      }}
+                      className='w-20 p-2 bg-sky-500 rounded text-white'
+                    >
+                      Edytuj
+                    </button>
+                    <button
+                      onClick={() => handleDeleteMarker(marker._id)}
+                      className='w-20 p-2 bg-red-500 rounded text-white'
+                    >
+                      Usuń
+                    </button>
+                  </div>
                 )}
               </div>
             </Popup>
           </Marker>
         ))}
         {searchResult && (
-          <Marker position={searchResult.position} icon={markerIcons.search}>
+          <Marker position={searchResult.position} icon={getIcon('purple')}>
             <Popup>
               <div className='text-center'>
                 <h2 className='font-bold'>{searchResult.name}</h2>
                 <p>Wyszukana lokalizacja</p>
+                <button
+                  onClick={() =>
+                    setMarkerModalData({
+                      name: searchResult.name,
+                      position: searchResult.position,
+                      color: 'purple',
+                    })
+                  }
+                  className='w-20 p-2 bg-green-500 rounded text-white'
+                >
+                  Dodaj
+                </button>
               </div>
             </Popup>
           </Marker>
         )}
         <MapComponent marker={searchResult} />
-        {routingCoords && (
-          <Routing
-            fromCoordinates={routingCoords[0]}
-            toCoordinates={routingCoords[1]}
-          />
-        )}
+        <Routing
+          fromCoordinates={routingCoords?.from ? routingCoords.from : null}
+          toCoordinates={routingCoords?.to ? routingCoords.to : null}
+        />
       </MapContainer>
+      {markerModalData && (
+        <MarkerModal
+          username={session?.user?.username}
+          marker={markerModalData}
+          setMarkerModalData={setMarkerModalData}
+          setMarkersToShow={setMarkersToShow}
+          setSearchResult={setSearchResult}
+        />
+      )}
     </div>
   );
 }
