@@ -3,17 +3,20 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter, redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import Loading from './Loading';
 
 export default function LoginForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const res = await signIn('credentials', {
@@ -30,11 +33,14 @@ export default function LoginForm() {
       router.replace('/');
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className='grid place-items-center h-screen'>
+      {isLoading && <Loading />}
       <div className='w-full sm:max-w-[500px]'>
         <form
           onSubmit={handleSubmit}

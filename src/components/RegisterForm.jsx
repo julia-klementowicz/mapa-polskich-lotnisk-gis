@@ -4,16 +4,19 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
+import Loading from './Loading';
 
 export default function RegisterForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (!username || !password) {
       setError('Wszystkie pola są wymagane');
@@ -66,11 +69,14 @@ export default function RegisterForm() {
       router.replace('/');
     } catch (error) {
       console.log('Error during registration: ', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className='grid place-items-center h-screen'>
+      {isLoading && <Loading />}
       <div className='w-full sm:max-w-[500px]'>
         <form
           onSubmit={handleSubmit}
