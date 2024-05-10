@@ -34,12 +34,12 @@ export default function Map() {
   const [searchResult, setSearchResult] = useState(null);
   const [shouldNavigate, setShouldNavigate] = useState(false);
   const [routingCoords, setRoutingCoords] = useState(null);
-  const [markersToShow, setMarkersToShow] = useState(defaultMarkers);
+  const [userMarkers, setUserMarkers] = useState([]);
   const [markerModalData, setMarkerModalData] = useState(null);
   const { data: session } = useSession();
 
   useEffect(() => {
-    async function getMarkersToShow() {
+    async function getUserMarkers() {
       const res = await fetch('api/userMarkers', {
         method: 'POST',
         headers: {
@@ -50,12 +50,12 @@ export default function Map() {
 
       const { markers } = await res.json();
       if (markers?.markers.length > 0) {
-        setMarkersToShow(markers.markers);
+        setUserMarkers(markers.markers);
       }
     }
 
     if (session?.user?.username) {
-      getMarkersToShow();
+      getUserMarkers();
     }
 
     if (!isLoaded) {
@@ -129,7 +129,7 @@ export default function Map() {
 
     const { message } = await res.json();
     if (message === 'success') {
-      setMarkersToShow((prev) =>
+      setUserMarkers((prev) =>
         prev.filter((marker) => marker._id !== markerId)
       );
     } else {
@@ -214,7 +214,25 @@ export default function Map() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         />
-        {markersToShow.map((marker, i) => (
+        {defaultMarkers.map((marker, i) => (
+          <Marker
+            key={i}
+            position={marker.position}
+            icon={getIcon(marker.color)}
+          >
+            <Popup>
+              <div className='text-center'>
+                <h2 className='font-bold'>{marker.name}</h2>
+                {marker.ICAO && <p>Kod ICAO: {marker.ICAO}</p>}
+                {marker.description && <p>{marker.description}</p>}
+                {marker.passengers && (
+                  <p>Roczna liczba pasażerów: {marker.passengers}</p>
+                )}
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+        {userMarkers.map((marker, i) => (
           <Marker
             key={i}
             position={marker.position}
@@ -283,7 +301,7 @@ export default function Map() {
           username={session?.user?.username}
           marker={markerModalData}
           setMarkerModalData={setMarkerModalData}
-          setMarkersToShow={setMarkersToShow}
+          setUserMarkers={setUserMarkers}
           setSearchResult={setSearchResult}
         />
       )}

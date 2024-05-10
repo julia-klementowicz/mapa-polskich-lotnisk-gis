@@ -10,7 +10,7 @@ export default function MarkerModal({
   username,
   marker,
   setMarkerModalData,
-  setMarkersToShow,
+  setUserMarkers,
   setSearchResult,
 }) {
   const [name, setName] = useState(marker?.name || '');
@@ -45,7 +45,7 @@ export default function MarkerModal({
         });
         const { message } = await editRes.json();
         if (message === 'success') {
-          setMarkersToShow((prev) =>
+          setUserMarkers((prev) =>
             prev.map((m) => (m._id === marker._id ? newMarker : m))
           );
           setSearchResult(null);
@@ -68,7 +68,7 @@ export default function MarkerModal({
 
         const { message } = await addRes.json();
         if (message === 'success') {
-          setMarkersToShow((prev) => [...prev, newMarker]);
+          setUserMarkers((prev) => [...prev, newMarker]);
           setSearchResult(null);
           setMarkerModalData(null);
         } else {

@@ -9,13 +9,13 @@ export async function POST(req, res) {
   try {
     const { username, password } = await req.json();
     const hashedPassword = await bcrypt.hash(password, 10);
-    const markersWithIds = markers.map((marker) => ({
-      _id: new mongoose.Types.ObjectId(),
-      ...marker,
-    }))
+    // const markersWithIds = markers.map((marker) => ({
+    //   _id: new mongoose.Types.ObjectId(),
+    //   ...marker,
+    // }))
 
     await connectMongoDB();
-    await User.create({ username, password: hashedPassword, markers: markersWithIds });
+    await User.create({ username, password: hashedPassword, markers: [] });
 
     return NextResponse.json({ message: 'user registered' }, { status: 200 });
   } catch (error) {
