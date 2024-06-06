@@ -12,7 +12,7 @@ export default function Header() {
 
   return (
     <header className='w-full h-12 px-3 grid grid-cols-5 items-center'>
-      <span></span>
+      <Link href='/ranking'>Ranking</Link>
       <Link href='/' className='col-span-3 justify-self-center'>
         <h1 className='font-bold text-lg sm:text-xl'>
           Mapa polskich lotnisk
