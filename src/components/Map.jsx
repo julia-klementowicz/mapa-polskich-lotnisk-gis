@@ -13,10 +13,11 @@ import { Icon } from 'leaflet';
 import MapComponent from './MapComponent';
 import Routing from './Routing';
 import Loading from './Loading';
-import { markers as defaultMarkers } from '@/data/markers';
+// import { markers as defaultMarkers } from '@/data/markers';
 import { PiNavigationArrow, PiMagnifyingGlass, PiX } from 'react-icons/pi';
 import 'leaflet/dist/leaflet.css';
 import MarkerModal from './MarkerModal';
+import Link from 'next/link';
 
 function getIcon(color) {
   return new Icon({
@@ -34,6 +35,7 @@ export default function Map() {
   const [searchResult, setSearchResult] = useState(null);
   const [shouldNavigate, setShouldNavigate] = useState(false);
   const [routingCoords, setRoutingCoords] = useState(null);
+  const [defaultMarkers, setDefaultMarkers] = useState([]);
   const [userMarkers, setUserMarkers] = useState([]);
   const [markerModalData, setMarkerModalData] = useState(null);
   const { data: session } = useSession();
@@ -53,6 +55,15 @@ export default function Map() {
         setUserMarkers(markers.markers);
       }
     }
+
+    async function getDefaultMarkers() {
+      const res = await fetch('api/defaultMarkers');
+      const { markers } = await res.json();
+      setDefaultMarkers(markers);
+      console.log('markers', markers);
+    }
+
+    getDefaultMarkers();
 
     if (session?.user?.username) {
       getUserMarkers();
@@ -203,6 +214,18 @@ export default function Map() {
           </button>
         )}
       </form>
+      <div
+        style={{ zIndex: 500 }}
+        className='absolute bottom-2 left-2 bg-white p-2 rounded-lg border border-neutral-300 flex flex-col gap-1'
+      >
+        <h2 className='text-center font-semibold'>Legenda</h2>
+        <div className='flex'>
+          <div className='w-6 h-6 mr-2 bg-red-500 rounded-md'></div>Lotnisko pasażerskie
+        </div>
+        <div className='flex'>
+          <div className='w-6 h-6 mr-2 bg-blue-500 rounded-md'></div>Lotnicza baza wojskowa
+        </div>
+      </div>
       <MapContainer
         center={[52.3, 19.123]}
         zoom={7}
@@ -228,6 +251,17 @@ export default function Map() {
                 {marker.passengers && (
                   <p>Roczna liczba pasażerów: {marker.passengers}</p>
                 )}
+                {marker.rateAverage ? (
+                  <p>Średnia ocena: {marker.rateAverage}</p>
+                ) : (
+                  <p>Brak ocen</p>
+                )}
+                <Link
+                  href={`/comments/${marker._id}`}
+                  className='p-2 bg-blue-500 rounded-md'
+                >
+                  <span className='text-white'>Sekcja komentarzy</span>
+                </Link>
               </div>
             </Popup>
           </Marker>

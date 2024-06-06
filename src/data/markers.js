@@ -6,6 +6,9 @@ export const markers = [
     ICAO: 'EPGD',
     passengers: '4 576 705',
     color: 'red',
+    rateCount: 0,
+    rateAverage: 0,
+    ratings: [],
   },
   {
     position: [52.165833, 20.967222],
@@ -14,6 +17,9 @@ export const markers = [
     ICAO: 'EPWA',
     passengers: '14 389 143',
     color: 'red',
+    rateCount: 0,
+    rateAverage: 0,
+    ratings: [],
   },
   {
     position: [50.077778, 19.785],
@@ -22,6 +28,9 @@ export const markers = [
     ICAO: 'EPKK',
     passengers: '7 386 496',
     color: 'red',
+    rateCount: 0,
+    rateAverage: 0,
+    ratings: [],
   },
   {
     position: [50.474444, 19.08],
@@ -30,6 +39,9 @@ export const markers = [
     ICAO: 'EPKT',
     passengers: '4 406 241',
     color: 'red',
+    rateCount: 0,
+    rateAverage: 0,
+    ratings: [],
   },
   {
     position: [52.451111, 20.650833],
@@ -38,6 +50,9 @@ export const markers = [
     ICAO: 'EPMO',
     passengers: '3 124 944',
     color: 'red',
+    rateCount: 0,
+    rateAverage: 0,
+    ratings: [],
   },
   {
     position: [51.102778, 16.886111],
@@ -46,6 +61,9 @@ export const markers = [
     ICAO: 'EPWR',
     passengers: '2 868 012',
     color: 'red',
+    rateCount: 0,
+    rateAverage: 0,
+    ratings: [],
   },
   {
     position: [52.421111, 16.826389],
@@ -54,6 +72,9 @@ export const markers = [
     ICAO: 'EPPO',
     passengers: '2 243 337',
     color: 'red',
+    rateCount: 0,
+    rateAverage: 0,
+    ratings: [],
   },
   {
     position: [50.11, 22.019167],
@@ -62,6 +83,9 @@ export const markers = [
     ICAO: 'EPRZ',
     passengers: '683 299',
     color: 'red',
+    rateCount: 0,
+    rateAverage: 0,
+    ratings: [],
   },
   {
     position: [53.584722, 14.902222],
@@ -70,6 +94,9 @@ export const markers = [
     ICAO: 'EPSC',
     passengers: '419 872',
     color: 'red',
+    rateCount: 0,
+    rateAverage: 0,
+    ratings: [],
   },
   {
     position: [54.578889, 18.519167],
@@ -77,6 +104,9 @@ export const markers = [
     description: 'Wojskowa baza lotnicza',
     ICAO: 'EPOK',
     color: 'blue',
+    rateCount: 0,
+    rateAverage: 0,
+    ratings: [],
   },
   {
     position: [54.026667, 19.136389],
@@ -84,6 +114,9 @@ export const markers = [
     description: 'Wojskowa baza lotnicza',
     ICAO: 'EPMB',
     color: 'blue',
+    rateCount: 0,
+    rateAverage: 0,
+    ratings: [],
   },
   {
     position: [52.195556, 21.656944],
@@ -91,5 +124,8 @@ export const markers = [
     description: 'Wojskowa baza lotnicza',
     ICAO: 'EPMM',
     color: 'blue',
+    rateCount: 0,
+    rateAverage: 0,
+    ratings: [],
   },
 ];

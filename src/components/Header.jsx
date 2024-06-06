@@ -13,9 +13,11 @@ export default function Header() {
   return (
     <header className='w-full h-12 px-3 grid grid-cols-5 items-center'>
       <span></span>
-      <h1 className='col-span-3 justify-self-center font-bold text-lg sm:text-xl'>
-        Mapa polskich lotnisk
-      </h1>
+      <Link href='/' className='col-span-3 justify-self-center'>
+        <h1 className='font-bold text-lg sm:text-xl'>
+          Mapa polskich lotnisk
+        </h1>
+      </Link>
       <div className='justify-self-end'>
         {session?.user ? (
           <button
