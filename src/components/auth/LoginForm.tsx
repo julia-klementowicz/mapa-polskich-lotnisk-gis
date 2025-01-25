@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import Loading from './Loading';
+import Loading from '../layout/Loading';
 
 export default function LoginForm() {
   const [username, setUsername] = useState('');

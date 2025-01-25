@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import Header from '@/components/Header';
-import Loading from '@/components/Loading';
-const Map = dynamic(() => import('@/components/Map'), { ssr: false });
+import Header from '@/components/layout/Header';
+import Loading from '@/components/layout/Loading';
+const Map = dynamic(() => import('@/components/map/Map'), { ssr: false });
 
 export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);

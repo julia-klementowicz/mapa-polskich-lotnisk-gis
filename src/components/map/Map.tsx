@@ -13,7 +13,7 @@ import {
 import { Icon } from 'leaflet';
 import MapComponent from './MapComponent';
 import Routing from './Routing';
-import Loading from './Loading';
+import Loading from '../layout/Loading';
 // import { markers as defaultMarkers } from '@/data/markers';
 import { PiNavigationArrow, PiMagnifyingGlass, PiX } from 'react-icons/pi';
 import 'leaflet/dist/leaflet.css';
@@ -237,9 +237,7 @@ export default function Map() {
         zoomControl={false}
       >
         <ZoomControl position='bottomright' />
-        <TileLayer
-          url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-        />
+        <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
         {defaultMarkers.map((marker, i) => (
           <Marker
             key={i}

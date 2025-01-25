@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { PiUserCircleLight } from 'react-icons/pi';
-import UserOptions from './UserOptions';
+import UserOptions from '../auth/UserOptions';
 
 export default function Header() {
   const [userOptions, setUserOptions] = useState(false);
@@ -14,9 +14,7 @@ export default function Header() {
     <header className='w-full h-12 px-3 grid grid-cols-5 items-center'>
       <Link href='/ranking'>Ranking</Link>
       <Link href='/' className='col-span-3 justify-self-center'>
-        <h1 className='font-bold text-lg sm:text-xl'>
-          Mapa polskich lotnisk
-        </h1>
+        <h1 className='font-bold text-lg sm:text-xl'>Mapa polskich lotnisk</h1>
       </Link>
       <div className='justify-self-end'>
         {session?.user ? (

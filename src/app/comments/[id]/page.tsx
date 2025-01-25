@@ -1,7 +1,7 @@
-import AddComment from '@/components/AddComment';
+import AddComment from '@/components/comments/AddComment';
 import { headers } from 'next/headers';
-import Header from '@/components/Header';
-import Comment from '@/components/Comment';
+import Header from '@/components/layout/Header';
+import Comment from '@/components/comments/Comment';
 
 async function getMarkerById(id) {
   const host = headers().get('host');

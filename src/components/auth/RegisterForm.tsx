@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import Loading from './Loading';
+import Loading from '../layout/Loading';
 
 export default function RegisterForm() {
   const [username, setUsername] = useState('');
