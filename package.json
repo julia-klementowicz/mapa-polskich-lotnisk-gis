@@ -21,6 +21,7 @@
     "react-leaflet": "^4.2.1"
   },
   "devDependencies": {
+    "@types/react": "^19.0.8",
     "autoprefixer": "^10",
     "eslint": "^8",
     "eslint-config-next": "14.0.0",
