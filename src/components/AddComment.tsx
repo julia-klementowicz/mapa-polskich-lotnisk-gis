@@ -49,7 +49,7 @@ export default function AddComment({ markerId }) {
             max={5}
             step={0.5}
             className='w-full'
-            onChange={(e) => setRating(e.target.value)}
+            onChange={(e) => setRating(Number(e.target.value))}
             value={rating}
           />
           <p>Ocena: {rating}</p>

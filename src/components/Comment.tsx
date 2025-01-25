@@ -8,7 +8,7 @@ export default function Comment({ comment }) {
             {comment.username}
           </p>
           <p className='text-sm text-gray-600'>
-            <time pubdate='' dateTime='2022-02-08' title='February 8th, 2022'>
+            <time dateTime='2022-02-08' title='February 8th, 2022'>
               {date.toLocaleDateString()} {date.toLocaleTimeString()}
             </time>
           </p>

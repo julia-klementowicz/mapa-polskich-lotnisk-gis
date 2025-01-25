@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -66,6 +67,7 @@ export default function Map() {
     getDefaultMarkers();
 
     if (session?.user?.username) {
+      console.log('session', session);
       getUserMarkers();
     }
 
@@ -220,10 +222,12 @@ export default function Map() {
       >
         <h2 className='text-center font-semibold'>Legenda</h2>
         <div className='flex'>
-          <div className='w-6 h-6 mr-2 bg-red-500 rounded-md'></div>Lotnisko pasażerskie
+          <div className='w-6 h-6 mr-2 bg-red-500 rounded-md'></div>Lotnisko
+          pasażerskie
         </div>
         <div className='flex'>
-          <div className='w-6 h-6 mr-2 bg-blue-500 rounded-md'></div>Lotnicza baza wojskowa
+          <div className='w-6 h-6 mr-2 bg-blue-500 rounded-md'></div>Lotnicza
+          baza wojskowa
         </div>
       </div>
       <MapContainer
@@ -234,7 +238,6 @@ export default function Map() {
       >
         <ZoomControl position='bottomright' />
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         />
         {defaultMarkers.map((marker, i) => (

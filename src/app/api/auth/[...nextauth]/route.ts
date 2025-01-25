@@ -7,6 +7,10 @@ import bcrypt from 'bcryptjs';
 export const authOptions = {
   providers: [
     CredentialsProvider({
+      credentials: {
+        username: { label: 'Username', type: 'text' },
+        password: { label: 'Password', type: 'password' },
+      },
       async authorize(credentials) {
         const { username, password } = credentials;
 
