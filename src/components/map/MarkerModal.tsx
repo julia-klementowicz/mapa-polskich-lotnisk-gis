@@ -51,10 +51,10 @@ export default function MarkerModal({
           setSearchResult(null);
           setMarkerModalData(null);
         } else {
-          alert('Wystąpił błąd');
+          alert('An error occured');
         }
       } catch (error) {
-        alert('Wystąpił błąd');
+        alert('An error occured');
       }
     } else {
       try {
@@ -72,10 +72,10 @@ export default function MarkerModal({
           setSearchResult(null);
           setMarkerModalData(null);
         } else {
-          alert('Wystąpił błąd');
+          alert('An error occured');
         }
       } catch (error) {
-        alert('Wystąpił błąd');
+        alert('An error occured');
       }
     }
   }
@@ -89,7 +89,7 @@ export default function MarkerModal({
         <div className='mb-4 w-full grid grid-cols-3 items-center'>
           <span />
           <h2 className='font-bold text-base sm:text-lg justify-self-center'>
-            {marker?._id ? 'Edytuj' : 'Dodaj'} marker
+            {marker?._id ? 'Edit' : 'Add'} a marker
           </h2>
           <button
             onClick={() => setMarkerModalData(null)}
@@ -105,7 +105,7 @@ export default function MarkerModal({
           <input
             type='text'
             className='border border-neutral-200 rounded-md p-2'
-            placeholder='Nazwa'
+            placeholder='Name'
             onChange={(e) => setName(e.target.value)}
             value={name}
             required
@@ -114,7 +114,7 @@ export default function MarkerModal({
             <input
               type='text'
               className='border border-neutral-200 rounded-md p-2'
-              placeholder='Kod ICAO'
+              placeholder='ICAO code'
               onChange={(e) => setICAO(e.target.value)}
               value={ICAO}
             />
@@ -123,7 +123,7 @@ export default function MarkerModal({
             <input
               type='text'
               className='border border-neutral-200 rounded-md p-2'
-              placeholder='Liczba pasażerów'
+              placeholder='Yearly passengers'
               onChange={(e) => setPassengers(e.target.value)}
               value={passengers}
             />
@@ -131,7 +131,7 @@ export default function MarkerModal({
           <input
             type='text'
             className='border border-neutral-200 rounded-md p-2'
-            placeholder='Opis'
+            placeholder='Description'
             onChange={(e) => setDescription(e.target.value)}
             value={description}
           />
@@ -139,7 +139,7 @@ export default function MarkerModal({
             <input
               type='number'
               className='border border-neutral-200 rounded-md p-2'
-              placeholder='Szerokość geograficzna'
+              placeholder='Latitude'
               onChange={(e) => setLat(e.target.value)}
               value={lat}
               required
@@ -147,7 +147,7 @@ export default function MarkerModal({
             <input
               type='number'
               className='border border-neutral-200 rounded-md p-2'
-              placeholder='Długość geograficzna'
+              placeholder='Longitude'
               onChange={(e) => setLng(e.target.value)}
               value={lng}
               required
@@ -176,7 +176,7 @@ export default function MarkerModal({
             ))}
           </div>
           <button className='mt-2 bg-green-500 text-white py-2 rounded-md'>
-            Zapisz
+            Save
           </button>
         </form>
       </div>

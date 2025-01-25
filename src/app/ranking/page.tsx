@@ -18,7 +18,7 @@ export default async function RankingPage() {
       <Header />
       <div className='max-w-2xl mx-auto p-6 text-center'>
         <h1 className='font-bold text-xl'>Ranking</h1>
-        <p>Ranking lotnisk w Polsce</p>
+        <p>Polish airports ranking</p>
         {markers
           .sort((a, b) => b.rateAverage - a.rateAverage)
           .map((marker) => (
@@ -29,17 +29,17 @@ export default async function RankingPage() {
               >
                 <h2 className='font-bold text-lg'>{marker.name}</h2>
                 <p>{marker.description}</p>
-                <p>Kod ICAO: {marker.ICAO}</p>
+                <p>ICAO code: {marker.ICAO}</p>
                 {marker.passengers && (
-                  <p>Liczba pasażerów: {marker.passengers}</p>
+                  <p>Yearly passengers: {marker.passengers}</p>
                 )}
                 {marker.rateAverage ? (
                   <>
-                    <p>Średnia ocena: {marker.rateAverage.toFixed(2)}</p>
-                    <p>Liczba ocen: {marker.rateCount}</p>
+                    <p>Averate rating: {marker.rateAverage.toFixed(2)}</p>
+                    <p>Number of ratings: {marker.rateCount}</p>
                   </>
                 ) : (
-                  <p>Brak ocen</p>
+                  <p>No ratings</p>
                 )}
               </div>
             </Link>

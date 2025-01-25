@@ -36,10 +36,10 @@ export default function AddComment({ markerId }) {
     <div className='mx-auto max-w-[500px] flex flex-col justify-center items-center'>
       {session?.user?.username ? (
         <form onSubmit={handleSubmit}>
-          <h2>Dodaj komentarz i ocenę</h2>
+          <h2>Add a comment and rating</h2>
           <textarea
             className='w-full p-2 border border-gray-300 rounded-lg'
-            placeholder='Treść komentarza'
+            placeholder='Comment'
             onChange={(e) => setComment(e.target.value)}
             value={comment}
           />
@@ -52,16 +52,16 @@ export default function AddComment({ markerId }) {
             onChange={(e) => setRating(Number(e.target.value))}
             value={rating}
           />
-          <p>Ocena: {rating}</p>
+          <p>Rating: {rating}</p>
           <button
             className='bg-blue-500 text-white p-2 rounded-lg w-full mt-4'
             type='submit'
           >
-            Dodaj
+            Submit
           </button>
         </form>
       ) : (
-        <p>Musisz być zalogowany żeby dodać komentarz</p>
+        <p>You have to be logged in to comment</p>
       )}
     </div>
   );

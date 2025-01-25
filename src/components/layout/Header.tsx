@@ -14,7 +14,7 @@ export default function Header() {
     <header className='w-full h-12 px-3 grid grid-cols-5 items-center'>
       <Link href='/ranking'>Ranking</Link>
       <Link href='/' className='col-span-3 justify-self-center'>
-        <h1 className='font-bold text-lg sm:text-xl'>Mapa polskich lotnisk</h1>
+        <h1 className='font-bold text-lg sm:text-xl'>The map of Polish airports</h1>
       </Link>
       <div className='justify-self-end'>
         {session?.user ? (
@@ -29,7 +29,7 @@ export default function Header() {
           </button>
         ) : (
           <Link href='/login' className='text-sm sm:text-base'>
-            Zaloguj się
+            Sign in
           </Link>
         )}
         {userOptions && <UserOptions />}

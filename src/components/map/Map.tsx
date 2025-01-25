@@ -61,7 +61,6 @@ export default function Map() {
       const res = await fetch('api/defaultMarkers');
       const { markers } = await res.json();
       setDefaultMarkers(markers);
-      console.log('markers', markers);
     }
 
     getDefaultMarkers();
@@ -96,7 +95,7 @@ export default function Map() {
         type: 'searchResult',
       });
     } else {
-      alert('Nie znaleziono takiej lokalizacji');
+      alert('Could not find location');
     }
   }
 
@@ -127,7 +126,7 @@ export default function Map() {
         },
       });
     } else {
-      alert('Nie znaleziono takiej lokalizacji');
+      alert('Could not find location');
     }
   }
 
@@ -146,7 +145,7 @@ export default function Map() {
         prev.filter((marker) => marker._id !== markerId)
       );
     } else {
-      alert('Wystąpił błąd');
+      alert('An error occurred');
     }
   }
 
@@ -161,7 +160,7 @@ export default function Map() {
           <input
             type='text'
             className='py-1 px-1.5 border border-neutral-300 rounded'
-            placeholder={shouldNavigate ? 'Punkt początkowy' : 'Szukaj miejsca'}
+            placeholder={shouldNavigate ? 'Starting point' : 'Find location'}
             onChange={(e) => {
               setSearchResult(null);
               setSearchPhrase(e.target.value);
@@ -185,7 +184,7 @@ export default function Map() {
             <input
               type='text'
               className='py-1 px-1.5 border border-neutral-300 rounded'
-              placeholder='Punkt docelowy'
+              placeholder='Destination point'
               onChange={(e) => {
                 setSearchResult(null);
                 setRoutingCoords(null);
@@ -204,7 +203,7 @@ export default function Map() {
             className='text-sm underline'
             onClick={() => setShouldNavigate((prev) => !prev)}
           >
-            Szukaj miejsca
+            Find location
           </button>
         ) : (
           <button
@@ -212,7 +211,7 @@ export default function Map() {
             className='text-sm underline'
             onClick={() => setShouldNavigate((prev) => !prev)}
           >
-            Znajdź trasę
+            Find a route
           </button>
         )}
       </form>
@@ -220,14 +219,14 @@ export default function Map() {
         style={{ zIndex: 500 }}
         className='absolute bottom-2 left-2 bg-white p-2 rounded-lg border border-neutral-300 flex flex-col gap-1'
       >
-        <h2 className='text-center font-semibold'>Legenda</h2>
+        <h2 className='text-center font-semibold'>Key</h2>
         <div className='flex'>
-          <div className='w-6 h-6 mr-2 bg-red-500 rounded-md'></div>Lotnisko
-          pasażerskie
+          <div className='w-6 h-6 mr-2 bg-red-500 rounded-md'></div>
+          Civil aviation airport
         </div>
         <div className='flex'>
-          <div className='w-6 h-6 mr-2 bg-blue-500 rounded-md'></div>Lotnicza
-          baza wojskowa
+          <div className='w-6 h-6 mr-2 bg-blue-500 rounded-md'></div>
+          Military airport
         </div>
       </div>
       <MapContainer
@@ -247,21 +246,21 @@ export default function Map() {
             <Popup>
               <div className='text-center'>
                 <h2 className='font-bold'>{marker.name}</h2>
-                {marker.ICAO && <p>Kod ICAO: {marker.ICAO}</p>}
+                {marker.ICAO && <p>ICAO code: {marker.ICAO}</p>}
                 {marker.description && <p>{marker.description}</p>}
                 {marker.passengers && (
-                  <p>Roczna liczba pasażerów: {marker.passengers}</p>
+                  <p>Yearly passengers: {marker.passengers}</p>
                 )}
                 {marker.rateAverage ? (
-                  <p>Średnia ocena: {marker.rateAverage}</p>
+                  <p>Average rating: {marker.rateAverage}</p>
                 ) : (
-                  <p>Brak ocen</p>
+                  <p>No ratings</p>
                 )}
                 <Link
                   href={`/comments/${marker._id}`}
                   className='p-2 bg-blue-500 rounded-md'
                 >
-                  <span className='text-white'>Sekcja komentarzy</span>
+                  <span className='text-white'>Comment section</span>
                 </Link>
               </div>
             </Popup>
@@ -276,10 +275,10 @@ export default function Map() {
             <Popup>
               <div className='text-center'>
                 <h2 className='font-bold'>{marker.name}</h2>
-                {marker.ICAO && <p>Kod ICAO: {marker.ICAO}</p>}
+                {marker.ICAO && <p>ICAO code: {marker.ICAO}</p>}
                 {marker.description && <p>{marker.description}</p>}
                 {marker.passengers && (
-                  <p>Roczna liczba pasażerów: {marker.passengers}</p>
+                  <p>Yearly passengers: {marker.passengers}</p>
                 )}
                 {session?.user?.username && (
                   <div className='flex justify-around'>
@@ -289,13 +288,13 @@ export default function Map() {
                       }}
                       className='w-20 p-2 bg-sky-500 rounded text-white'
                     >
-                      Edytuj
+                      Edit
                     </button>
                     <button
                       onClick={() => handleDeleteMarker(marker._id)}
                       className='w-20 p-2 bg-red-500 rounded text-white'
                     >
-                      Usuń
+                      Delete
                     </button>
                   </div>
                 )}
@@ -308,7 +307,7 @@ export default function Map() {
             <Popup>
               <div className='text-center'>
                 <h2 className='font-bold'>{searchResult.name}</h2>
-                <p>Wyszukana lokalizacja</p>
+                <p>Search result</p>
                 <button
                   onClick={() =>
                     setMarkerModalData({
@@ -319,7 +318,7 @@ export default function Map() {
                   }
                   className='w-20 p-2 bg-green-500 rounded text-white'
                 >
-                  Dodaj
+                  Add
                 </button>
               </div>
             </Popup>

@@ -19,7 +19,7 @@ export default function RegisterForm() {
     setIsLoading(true);
 
     if (!username || !password) {
-      setError('Wszystkie pola są wymagane');
+      setError('All fields are required');
       return;
     }
 
@@ -35,7 +35,7 @@ export default function RegisterForm() {
       const { userExists } = await resUserExists.json();
 
       if (userExists) {
-        setError('Nazwa użytkownika jest już zajęta');
+        setError('User already exists');
         return;
       }
 
@@ -51,7 +51,7 @@ export default function RegisterForm() {
       });
 
       if (!res.ok) {
-        setError('Wystąpił błąd podczas rejestracji');
+        setError('An error occurred during registration');
         return;
       }
 
@@ -62,7 +62,7 @@ export default function RegisterForm() {
       });
 
       if (resSignIn.error) {
-        setError('Zarejestrowano, ale nie udało się zalogować');
+        setError('Signed up, but could not sign in');
         return;
       }
 
@@ -82,23 +82,23 @@ export default function RegisterForm() {
           onSubmit={handleSubmit}
           className='flex flex-col gap-3 shadow-lg m-4 p-5 rounded-lg border-t-4 border-green-400'
         >
-          <h1 className='text-xl font-bold my-4'>Zarejestruj się</h1>
+          <h1 className='text-xl font-bold my-4'>Sign up</h1>
           <input
             required
             onChange={(e) => setUsername(e.target.value)}
             type='text'
-            placeholder='Nazwa użytkownika'
+            placeholder='Username'
             className='border border-gray-200 py-2 px-3 bg-zinc-100/40 rounded-lg'
           />
           <input
             required
             onChange={(e) => setPassword(e.target.value)}
             type='password'
-            placeholder='Hasło'
+            placeholder='Password'
             className='border border-gray-200 py-2 px-3 bg-zinc-100/40 rounded-lg'
           />
           <button className='bg-green-600 text-white font-bold cursor-pointer px-6 py-2 rounded-md'>
-            Załóż konto
+            Sign up
           </button>
 
           {error && (
@@ -108,7 +108,7 @@ export default function RegisterForm() {
           )}
 
           <Link className='text-sm mt-3 text-right' href='/login'>
-            Masz już konto? <span className='underline'>Zaloguj się</span>
+            Already have an account? <span className='underline'>Sign in</span>
           </Link>
         </form>
       </div>

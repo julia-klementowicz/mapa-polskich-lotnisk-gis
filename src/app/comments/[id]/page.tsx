@@ -27,12 +27,12 @@ export default async function Comments({ params }) {
         <div className='text-center mb-4'>
           <h1 className='font-bold text-xl'>{marker.name}</h1>
           <p>{marker.description}</p>
-          <p>Kod ICAO: {marker.ICAO}</p>
-          <p className='mb-4'>Roczna liczba pasażerów: {marker.passengers}</p>
+          <p>ICAO code: {marker.ICAO}</p>
+          <p className='mb-4'>Yearly passengers: {marker.passengers}</p>
           {marker.rateAverage ? (
-            <p>Średnia ocena: {marker.rateAverage.toFixed(2)}</p>
+            <p>Average rating: {marker.rateAverage.toFixed(2)}</p>
           ) : (
-            <p>Brak ocen</p>
+            <p>No ratings</p>
           )}
         </div>
         <AddComment markerId={params.id} />

@@ -26,7 +26,7 @@ export default function LoginForm() {
       });
 
       if (res.error) {
-        setError('Niepoprawna nazwa użytkownika lub hasło');
+        setError('Invalid username or password');
         return;
       }
 
@@ -46,13 +46,13 @@ export default function LoginForm() {
           onSubmit={handleSubmit}
           className='flex flex-col gap-3 shadow-lg m-4 p-5 rounded-lg border-t-4 border-green-400'
         >
-          <h1 className='text-xl font-bold my-4'>Zaloguj się</h1>
+          <h1 className='text-xl font-bold my-4'>Sign in</h1>
           <input
             required
             onChange={(e) => setUsername(e.target.value)}
             value={username}
             type='text'
-            placeholder='Nazwa użytkownika'
+            placeholder='Username'
             className='w-full border border-gray-200 py-2 px-3 bg-zinc-100/40 rounded-lg'
           />
           <input
@@ -60,11 +60,11 @@ export default function LoginForm() {
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             type='password'
-            placeholder='Hasło'
+            placeholder='Password'
             className='w-full border border-gray-200 py-2 px-3 bg-zinc-100/40 rounded-lg'
           />
           <button className='bg-green-600 text-white font-bold cursor-pointer px-6 py-2 rounded-md'>
-            Zaloguj się
+            Sign in
           </button>
           {error && (
             <div className='bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2'>
@@ -72,7 +72,7 @@ export default function LoginForm() {
             </div>
           )}
           <Link className='text-sm mt-3 text-right' href='/register'>
-            Nie masz konta? <span className='underline'>Zarejestruj się</span>
+            No account? <span className='underline'>Sign up</span>
           </Link>
         </form>
       </div>

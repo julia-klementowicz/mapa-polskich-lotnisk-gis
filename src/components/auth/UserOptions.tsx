@@ -13,7 +13,7 @@ export default function UserOptions() {
         className='w-full text-sm py-2 pl-2 pr-4 hover:bg-neutral-100 rounded-md flex items-center'
       >
         <PiSignOut className='w-5 h-5 mr-2' />
-        <span>Wyloguj się</span>
+        <span>Log out</span>
       </button>
     </div>
   );

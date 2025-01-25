@@ -15,7 +15,7 @@ export default function Comment({ comment }) {
         </div>
       </div>
       <p className='text-justify text-gray-500'>
-        Ocena: {comment.rate.toFixed(2)}
+        Rating: {comment.rate.toFixed(2)}
       </p>
       <p className='text-gray-500 text-justify'>{comment.comment}</p>
     </article>
