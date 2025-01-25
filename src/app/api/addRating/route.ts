@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req, res) {
   const { username, comment, rate, markerId } = await req.json();
-  console.log('server', { username, comment, rate, markerId });
+
   try {
     await connectMongoDB();
     const marker = await Marker.findById(markerId);

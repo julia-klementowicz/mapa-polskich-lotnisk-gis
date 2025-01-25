@@ -1,6 +1,5 @@
 import { signOut } from 'next-auth/react';
-import Link from 'next/link';
-import { PiSignOut, PiMapPin } from 'react-icons/pi';
+import { PiSignOut } from 'react-icons/pi';
 
 export default function UserOptions() {
   return (

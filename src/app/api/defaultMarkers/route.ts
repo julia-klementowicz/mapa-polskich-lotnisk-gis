@@ -1,5 +1,4 @@
 import { connectMongoDB } from '@/lib/mongodb';
-import User from '@/models/user';
 import Marker from '@/models/marker';
 import { NextResponse } from 'next/server';
 

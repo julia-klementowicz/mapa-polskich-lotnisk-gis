@@ -1,8 +1,7 @@
-import { Inter, Mulish } from 'next/font/google';
+import { Mulish } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/components/Providers';
 
-const inter = Inter({ subsets: ['latin'] });
 const mulish = Mulish({ subsets: ['latin'] });
 
 export const metadata = {
