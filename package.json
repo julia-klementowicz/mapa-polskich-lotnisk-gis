@@ -9,7 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
+    "@heroui/button": "^2.2.10",
+    "@heroui/input": "^2.4.10",
+    "@heroui/slider": "^2.4.8",
+    "@heroui/system": "^2.4.7",
+    "@heroui/theme": "^2.4.6",
     "bcryptjs": "^2.4.3",
+    "framer-motion": "^12.0.5",
     "leaflet": "^1.9.4",
     "leaflet-routing-machine": "^3.2.12",
     "mongoose": "^8.0.3",
@@ -18,7 +25,8 @@
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^4.12.0",
-    "react-leaflet": "^4.2.1"
+    "react-leaflet": "^4.2.1",
+    "swr": "^2.3.0"
   },
   "devDependencies": {
     "@types/react": "^19.0.8",

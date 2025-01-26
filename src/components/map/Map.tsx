@@ -1,8 +1,12 @@
-// @ts-nocheck
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import useSWR from 'swr';
+import Loading from '../layout/Loading';
+import getUserMarkers from '@/lib/getUserMarkers';
+import getDefaultMarkers from '@/lib/getDefaultMarkers';
 import {
   MapContainer,
   TileLayer,
@@ -11,18 +15,16 @@ import {
   ZoomControl,
 } from 'react-leaflet';
 import { Icon } from 'leaflet';
-import MapComponent from './MapComponent';
-import Routing from './Routing';
-import Loading from '../layout/Loading';
-// import { markers as defaultMarkers } from '@/data/markers';
-import { PiNavigationArrow, PiMagnifyingGlass, PiX } from 'react-icons/pi';
 import 'leaflet/dist/leaflet.css';
+import MapComponent from './MapComponent';
 import MarkerModal from './MarkerModal';
-import Link from 'next/link';
+import Routing from './Routing';
+import { Button } from '@heroui/button';
+import { PiNavigationArrow, PiMagnifyingGlass, PiX } from 'react-icons/pi';
 
 function getIcon(color) {
   return new Icon({
-    iconUrl: `/location-pin-${color}.png`,
+    iconUrl: `/location-pin-${color}.svg`,
     iconSize: [40, 40],
     iconAnchor: [20, 40],
     popupAnchor: [0, -40],
@@ -30,53 +32,39 @@ function getIcon(color) {
 }
 
 export default function Map() {
-  const [isLoaded, setIsLoaded] = useState(false);
   const [searchPhrase, setSearchPhrase] = useState('');
   const [destinationPhrase, setDestinationPhrase] = useState('');
   const [searchResult, setSearchResult] = useState(null);
   const [shouldNavigate, setShouldNavigate] = useState(false);
   const [routingCoords, setRoutingCoords] = useState(null);
-  const [defaultMarkers, setDefaultMarkers] = useState([]);
-  const [userMarkers, setUserMarkers] = useState([]);
   const [markerModalData, setMarkerModalData] = useState(null);
   const { data: session } = useSession();
 
-  useEffect(() => {
-    async function getUserMarkers() {
-      const res = await fetch('api/userMarkers', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username: session?.user?.username }),
-      });
+  const {
+    data: defaultMarkersData,
+    isLoading: isDefaultMarkersDataLoading,
+    error: defaultMarkersDataError,
+  } = useSWR('api/defaultMarkers', () => getDefaultMarkers());
 
-      const { markers } = await res.json();
-      if (markers?.markers.length > 0) {
-        setUserMarkers(markers.markers);
-      }
-    }
+  const {
+    data: userMarkersData,
+    isLoading: isUserMarkersDataLoading,
+    error: userMarkersDataError,
+    mutate: setUserMarkers,
+  } = useSWR(session?.user?.username ? 'api/userMarkers' : null, () =>
+    getUserMarkers(session?.user?.username)
+  );
 
-    async function getDefaultMarkers() {
-      const res = await fetch('api/defaultMarkers');
-      const { markers } = await res.json();
-      setDefaultMarkers(markers);
-    }
-
-    getDefaultMarkers();
-
-    if (session?.user?.username) {
-      console.log('session', session);
-      getUserMarkers();
-    }
-
-    if (!isLoaded) {
-      setIsLoaded(true);
-    }
-  }, [isLoaded, session?.user?.username]);
-
-  if (!isLoaded || typeof window === 'undefined') {
+  if (
+    isDefaultMarkersDataLoading ||
+    isUserMarkersDataLoading ||
+    typeof window === 'undefined'
+  ) {
     return <Loading />;
+  }
+
+  if (defaultMarkersDataError || userMarkersDataError) {
+    return <div>An error occurred</div>;
   }
 
   async function handleSearch(e) {
@@ -153,7 +141,7 @@ export default function Map() {
     <div className='h-full relative'>
       <form
         style={{ zIndex: 500 }}
-        className='absolute top-2 left-2 bg-white p-2 rounded-lg border border-neutral-300 flex flex-col gap-1'
+        className='absolute top-2 left-2 bg-white p-3 rounded-xl border border-neutral-300 flex flex-col gap-1'
         onSubmit={shouldNavigate ? handleNavigate : handleSearch}
       >
         <div className='flex gap-1'>
@@ -217,7 +205,7 @@ export default function Map() {
       </form>
       <div
         style={{ zIndex: 500 }}
-        className='absolute bottom-2 left-2 bg-white p-2 rounded-lg border border-neutral-300 flex flex-col gap-1'
+        className='absolute bottom-2 left-2 bg-white p-3 rounded-xl border border-neutral-300 flex flex-col gap-1'
       >
         <h2 className='text-center font-semibold'>Key</h2>
         <div className='flex'>
@@ -230,6 +218,7 @@ export default function Map() {
         </div>
       </div>
       <MapContainer
+        // @ts-ignore
         center={[52.3, 19.123]}
         zoom={7}
         style={{ height: '100%', width: '100%' }}
@@ -237,89 +226,99 @@ export default function Map() {
       >
         <ZoomControl position='bottomright' />
         <TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
-        {defaultMarkers.map((marker, i) => (
-          <Marker
-            key={i}
-            position={marker.position}
-            icon={getIcon(marker.color)}
-          >
-            <Popup>
-              <div className='text-center'>
-                <h2 className='font-bold'>{marker.name}</h2>
-                {marker.ICAO && <p>ICAO code: {marker.ICAO}</p>}
-                {marker.description && <p>{marker.description}</p>}
-                {marker.passengers && (
-                  <p>Yearly passengers: {marker.passengers}</p>
-                )}
-                {marker.rateAverage ? (
-                  <p>Average rating: {marker.rateAverage}</p>
-                ) : (
-                  <p>No ratings</p>
-                )}
-                <Link
-                  href={`/comments/${marker._id}`}
-                  className='p-2 bg-blue-500 rounded-md'
-                >
-                  <span className='text-white'>Comment section</span>
-                </Link>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
-        {userMarkers.map((marker, i) => (
-          <Marker
-            key={i}
-            position={marker.position}
-            icon={getIcon(marker.color)}
-          >
-            <Popup>
-              <div className='text-center'>
-                <h2 className='font-bold'>{marker.name}</h2>
-                {marker.ICAO && <p>ICAO code: {marker.ICAO}</p>}
-                {marker.description && <p>{marker.description}</p>}
-                {marker.passengers && (
-                  <p>Yearly passengers: {marker.passengers}</p>
-                )}
-                {session?.user?.username && (
-                  <div className='flex justify-around'>
-                    <button
-                      onClick={() => {
-                        setMarkerModalData(marker);
-                      }}
-                      className='w-20 p-2 bg-sky-500 rounded text-white'
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteMarker(marker._id)}
-                      className='w-20 p-2 bg-red-500 rounded text-white'
-                    >
-                      Delete
-                    </button>
-                  </div>
-                )}
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+        {defaultMarkersData &&
+          defaultMarkersData.map((marker, i) => (
+            <Marker
+              key={i}
+              position={marker.position}
+              // @ts-ignore
+              icon={getIcon(marker.color)}
+            >
+              <Popup>
+                <div className='text-center'>
+                  <h2 className='font-bold'>{marker.name}</h2>
+                  {marker.ICAO && <p>ICAO code: {marker.ICAO}</p>}
+                  {marker.description && <p>{marker.description}</p>}
+                  {marker.passengers && (
+                    <p>Yearly passengers: {marker.passengers}</p>
+                  )}
+                  {marker.rateAverage ? (
+                    <p>Average rating: {marker.rateAverage}</p>
+                  ) : (
+                    <p>No ratings</p>
+                  )}
+                  <Button
+                    as={Link}
+                    href={`/comments/${marker._id}`}
+                    className='bg-blue-500'
+                    radius='sm'
+                  >
+                    <span className='text-white'>Comment section</span>
+                  </Button>
+                </div>
+              </Popup>
+            </Marker>
+          ))}
+        {userMarkersData &&
+          userMarkersData.map((marker, i) => (
+            <Marker
+              key={i}
+              position={marker.position}
+              // @ts-ignore
+              icon={getIcon(marker.color)}
+            >
+              <Popup>
+                <div className='text-center'>
+                  <h2 className='font-bold'>{marker.name}</h2>
+                  {marker.ICAO && <p>ICAO code: {marker.ICAO}</p>}
+                  {marker.description && <p>{marker.description}</p>}
+                  {marker.passengers && (
+                    <p>Yearly passengers: {marker.passengers}</p>
+                  )}
+                  {session?.user?.username && (
+                    <div className='flex gap-2 justify-around'>
+                      <Button
+                        onPress={() => {
+                          setMarkerModalData(marker);
+                        }}
+                        className='w-20 bg-sky-500 text-white'
+                        radius='sm'
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        onPress={() => handleDeleteMarker(marker._id)}
+                        className='w-20 bg-red-500 text-white'
+                        radius='sm'
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              </Popup>
+            </Marker>
+          ))}
         {searchResult && (
+          // @ts-ignore
           <Marker position={searchResult.position} icon={getIcon('purple')}>
             <Popup>
               <div className='text-center'>
                 <h2 className='font-bold'>{searchResult.name}</h2>
                 <p>Search result</p>
-                <button
-                  onClick={() =>
+                <Button
+                  onPress={() =>
                     setMarkerModalData({
                       name: searchResult.name,
                       position: searchResult.position,
                       color: 'purple',
                     })
                   }
-                  className='w-20 p-2 bg-green-500 rounded text-white'
+                  className='w-20 bg-green-500 text-white'
+                  radius='sm'
                 >
                   Add
-                </button>
+                </Button>
               </div>
             </Popup>
           </Marker>

@@ -17,7 +17,7 @@ export default function Routing({ fromCoordinates, toCoordinates }) {
     }
 
     const markerIcon = new L.Icon({
-      iconUrl: '/location-pin-purple.png',
+      iconUrl: '/location-pin-purple.svg',
       iconSize: [40, 40],
       iconAnchor: [20, 40],
       popupAnchor: [0, -40],

@@ -5,10 +5,13 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import Loading from '../layout/Loading';
+import { Button } from '@heroui/button';
+import { Input } from '@heroui/input';
 
 export default function RegisterForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -20,6 +23,13 @@ export default function RegisterForm() {
 
     if (!username || !password) {
       setError('All fields are required');
+      setIsLoading(false);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      setIsLoading(false);
       return;
     }
 
@@ -80,26 +90,43 @@ export default function RegisterForm() {
       <div className='w-full sm:max-w-[500px]'>
         <form
           onSubmit={handleSubmit}
-          className='flex flex-col gap-3 shadow-lg m-4 p-5 rounded-lg border-t-4 border-green-400'
+          className='flex flex-col gap-3 shadow-lg m-4 p-5 rounded-xl border-t-4 border-green-400'
         >
           <h1 className='text-xl font-bold my-4'>Sign up</h1>
-          <input
+          <Input
             required
+            variant='bordered'
+            value={username}
             onChange={(e) => setUsername(e.target.value)}
             type='text'
-            placeholder='Username'
-            className='border border-gray-200 py-2 px-3 bg-zinc-100/40 rounded-lg'
+            label='Username'
+            className='w-full'
           />
-          <input
+          <Input
             required
+            variant='bordered'
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
             type='password'
-            placeholder='Password'
-            className='border border-gray-200 py-2 px-3 bg-zinc-100/40 rounded-lg'
+            label='Password'
+            className='w-full'
           />
-          <button className='bg-green-600 text-white font-bold cursor-pointer px-6 py-2 rounded-md'>
+          <Input
+            required
+            variant='bordered'
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            type='password'
+            label='Confirm password'
+            className='w-full'
+          />
+          <Button
+            type='submit'
+            className='bg-green-600 text-white font-bold cursor-pointer px-6 py-2'
+            size='lg'
+          >
             Sign up
-          </button>
+          </Button>
 
           {error && (
             <div className='bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2'>
@@ -108,7 +135,7 @@ export default function RegisterForm() {
           )}
 
           <Link className='text-sm mt-3 text-right' href='/login'>
-            Already have an account? <span className='underline'>Sign in</span>
+            Already have an account? <span className='underline'>Log in</span>
           </Link>
         </form>
       </div>

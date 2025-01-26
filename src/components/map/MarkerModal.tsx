@@ -85,7 +85,7 @@ export default function MarkerModal({
       className='fixed top-0 left-0 w-full h-screen bg-black bg-opacity-50 flex justify-center items-center'
       style={{ zIndex: 700 }}
     >
-      <div className='max-w-[500px] bg-white m-4 p-4 rounded-lg'>
+      <div className='max-w-[500px] bg-white m-4 p-4 rounded-xl'>
         <div className='mb-4 w-full grid grid-cols-3 items-center'>
           <span />
           <h2 className='font-bold text-base sm:text-lg justify-self-center'>
@@ -161,13 +161,13 @@ export default function MarkerModal({
                 onClick={() => setColor(clr)}
                 className={`relative border ${
                   clr === color ? 'border-black' : 'border-gray-200'
-                }  rounded-lg p-1`}
+                }  rounded-xl p-1`}
               >
                 {clr === color && (
                   <IoIosCheckmarkCircle className='absolute -top-1.5 -left-1.5 w-5 h-5' />
                 )}
                 <Image
-                  src={`/location-pin-${clr}.png`}
+                  src={`/location-pin-${clr}.svg`}
                   width={50}
                   height={50}
                   alt={clr}

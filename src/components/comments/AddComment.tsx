@@ -1,6 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { Slider } from '@heroui/slider';
+import { Button } from '@heroui/button';
 
 export default function AddComment({ markerId }) {
   const [comment, setComment] = useState('');
@@ -38,27 +40,26 @@ export default function AddComment({ markerId }) {
         <form onSubmit={handleSubmit}>
           <h2>Add a comment and rating</h2>
           <textarea
-            className='w-full p-2 border border-gray-300 rounded-lg'
+            className='w-full p-2 border border-gray-300 rounded-xl'
             placeholder='Comment'
             onChange={(e) => setComment(e.target.value)}
             value={comment}
           />
-          <input
-            type='range'
-            min={1}
-            max={5}
+          <Slider
+            minValue={1}
+            maxValue={5}
             step={0.5}
             className='w-full'
-            onChange={(e) => setRating(Number(e.target.value))}
+            onChange={(value: number) => setRating(value)}
             value={rating}
           />
           <p>Rating: {rating}</p>
-          <button
-            className='bg-blue-500 text-white p-2 rounded-lg w-full mt-4'
+          <Button
+            className='bg-blue-500 text-white p-2 w-full mt-4'
             type='submit'
           >
             Submit
-          </button>
+          </Button>
         </form>
       ) : (
         <p>You have to be logged in to comment</p>

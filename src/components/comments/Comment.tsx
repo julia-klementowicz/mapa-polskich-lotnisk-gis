@@ -1,7 +1,7 @@
 export default function Comment({ comment }) {
   const date = new Date(comment.createdAt);
   return (
-    <article className='flex flex-col gap-3 my-3 p-6 text-base bg-white rounded-lg border border-gray-300'>
+    <article className='flex flex-col gap-3 my-3 p-6 text-base bg-white rounded-xl border border-gray-300'>
       <div className='flex justify-between items-center'>
         <div className='flex items-center'>
           <p className='inline-flex items-center mr-3 text-sm text-gray-900 font-semibold'>

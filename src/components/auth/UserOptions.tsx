@@ -4,7 +4,7 @@ import { PiSignOut } from 'react-icons/pi';
 export default function UserOptions() {
   return (
     <div
-      className='fixed top-[50px] right-1 bg-white p-2 rounded-lg border border-neutral-300'
+      className='fixed top-[50px] right-1 bg-white p-2 rounded-xl border border-neutral-300'
       style={{ zIndex: 650 }}
     >
       <button

@@ -25,7 +25,7 @@ export default async function RankingPage() {
             <Link href={`/comments/${marker._id}`} key={marker._id}>
               <div
                 key={marker._id}
-                className='border border-gray-300 rounded-lg p-4 my-4'
+                className='border border-gray-300 rounded-xl p-4 my-4'
               >
                 <h2 className='font-bold text-lg'>{marker.name}</h2>
                 <p>{marker.description}</p>
